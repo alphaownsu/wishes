@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Happy Birthday Mehkuu 🌸</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -40,7 +40,10 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        html, body { height: 100%; }
+        
+        html {
+            scroll-behavior: smooth;
+        }
 
         body {
             font-family: 'Cormorant Garamond', serif;
@@ -52,11 +55,13 @@
                 linear-gradient(135deg, var(--bg-1) 0%, var(--bg-2) 50%, var(--bg-3) 100%);
             background-attachment: fixed;
             min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
+            min-height: 100dvh;
+            /* FIXED: Allow scrolling and prevent content cut-off */
+            overflow-x: hidden;
+            overflow-y: auto;
             position: relative;
+            display: flex;
+            flex-direction: column;
         }
 
         body::before {
@@ -129,19 +134,25 @@
            TOP GREETING (Writing Animation)
            ============================================================ */
         .top-greeting {
-            position: fixed; top: 45px; left: 50%;
+            position: fixed; 
+            top: clamp(10px, 4vh, 45px); 
+            left: 50%;
             transform: translateX(-50%);
             z-index: 200;
             display: flex; align-items: center; justify-content: center;
             font-family: 'Parisienne', cursive;
-            font-size: 3.4rem;
+            /* FIXED: Responsive font size */
+            font-size: clamp(1.8rem, 6vw, 3.4rem); 
             color: var(--rose-text);
             white-space: nowrap;
             pointer-events: none;
             text-align: center;
-            padding: 6px 34px;
+            padding: 6px 20px;
             transition: opacity 1.1s ease, transform 1.1s ease, filter 1.1s ease;
             filter: drop-shadow(0 2px 4px rgba(120,60,80,0.25));
+            width: 100%;
+            max-width: 100vw;
+            overflow: hidden;
         }
         .top-greeting::before {
             content: '';
@@ -185,12 +196,18 @@
         .container {
             position: relative; z-index: 10;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            width: 100%; max-width: 640px; padding: 20px;
+            width: 100%; max-width: 640px; 
+            min-height: 100vh;
+            min-height: 100dvh;
+            padding: 20px;
+            margin: 0 auto;
+            /* FIXED: Removed flex centering from body to allow natural scroll, added margin auto here */
         }
 
         .gift-wrapper {
             cursor: pointer; display: flex; flex-direction: column; align-items: center; position: relative;
             transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            margin-top: 60px; /* Give space for top greeting */
         }
         .gift-wrapper:hover { transform: scale(1.06); }
 
@@ -266,28 +283,33 @@
             display: none; position: relative; width: 100%; height: 100%;
             flex-direction: column; align-items: center; justify-content: center;
             z-index: 15; opacity: 0; transition: opacity 1s ease;
+            padding: 20px 0;
         }
         .cake-scene.active { display: flex; opacity: 1; }
 
         .cake-instruction {
-            font-family: 'Caveat', cursive; font-size: 2.6rem; color: var(--rose-text);
+            font-family: 'Caveat', cursive; font-size: clamp(1.8rem, 5vw, 2.6rem); color: var(--rose-text);
             margin-bottom: 32px; text-align: center;
             text-shadow: 0 2px 8px rgba(255,255,255,0.8);
             animation: pulseText 2s infinite alternate;
+            padding: 0 15px;
         }
         @keyframes pulseText {
             0%   { transform: scale(1);    opacity: 0.85; }
             100% { transform: scale(1.03); opacity: 1; }
         }
         .cake-wrapper {
-            position: relative; width: 320px; height: 320px;
+            position: relative; 
+            /* FIXED: Responsive size for cake */
+            width: clamp(260px, 80vw, 320px); 
+            height: clamp(260px, 80vw, 320px);
             cursor: pointer; perspective: 1200px; transition: transform 0.3s ease;
         }
         .cake-wrapper:hover { transform: scale(1.04); }
 
         .cake-3d-container {
             position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
-            width: 320px; height: 320px; transform-style: preserve-3d;
+            width: 100%; height: 100%; transform-style: preserve-3d;
         }
         .cake-plate, .cake-half, .cake-candle-layer {
             position: absolute; inset: 0; width: 100%; height: 100%;
@@ -354,11 +376,13 @@
         .scrapbook-container {
             display: none;
             position: relative;
-            width: 100%; max-width: 600px;
+            width: 100%; 
+            max-width: 600px;
             min-height: 500px;
             opacity: 0;
             transform: scale(0.9);
             transition: all 1.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            margin: 0 auto;
         }
         .scrapbook-container.show {
             display: block;
@@ -377,6 +401,7 @@
             align-items: center;
             justify-content: center;
             text-align: center;
+            box-sizing: border-box; /* FIXED: Prevent padding from expanding width */
         }
         .tape {
             position: absolute; width: 60px; height: 20px;
@@ -395,7 +420,7 @@
             z-index: 5;
         }
         .title-note .card-title {
-            font-family: 'Great Vibes', cursive; font-size: 4rem;
+            font-family: 'Great Vibes', cursive; font-size: clamp(2.5rem, 8vw, 4rem);
             background: linear-gradient(160deg, #8c5a63 0%, #e5989b 50%, #b5838d 100%);
             -webkit-background-clip: text; background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -423,8 +448,8 @@
         }
         .slideshow-container {
             width: 100%;
-            height: 120px; font-family: 'Cormorant Garamond', serif;
-            font-size: 1.3rem; font-style: italic; color: var(--rose-text);
+            min-height: 120px; font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(1.1rem, 3.5vw, 1.3rem); font-style: italic; color: var(--rose-text);
             position: relative; display: flex; align-items: center; justify-content: center;
             padding: 0 10px; text-align: center;
         }
@@ -473,7 +498,7 @@
         .sticker-sparkle.s2 { bottom: -20px; left: 10%; transform: rotate(-20deg); }
 
         /* ============================================================
-           MODAL (Fixed White Overlay Issue)
+           MODAL (Fixed White Overlay Issue & Responsive)
            ============================================================ */
         .modal-overlay {
             position: fixed; inset: 0; background: rgba(80, 40, 55, 0.55);
@@ -485,22 +510,24 @@
         .modal-overlay.active { opacity: 1; pointer-events: auto; }
         .modal-content {
             position: relative; background: var(--paper);
-            border-radius: 8px; padding: 50px 40px 40px;
+            border-radius: 8px; padding: 40px 30px 30px;
             max-width: 540px; width: 100%; text-align: center;
             transform: translateY(60px) scale(0.92);
             transition: all 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             box-shadow: 0 20px 50px rgba(80,40,55,0.4);
-            /* Removed the white radial gradient that was hiding the text */
             background-image: linear-gradient(160deg, #fffaf5 0%, #fce4ec 100%);
+            /* FIXED: Make modal scrollable on small screens */
+            max-height: 90vh;
+            max-height: 90dvh;
+            overflow-y: auto;
         }
         .modal-content::before {
             content: ''; position: absolute; inset: 12px;
             border: 1px dashed rgba(180,110,125,0.3); border-radius: 3px; pointer-events: none;
         }
-        /* Removed the ::after symbol (❦) to clear up the top space */
         .modal-overlay.active .modal-content { transform: translateY(0) scale(1); }
         .modal-content h2 {
-            font-family: 'Great Vibes', cursive; font-size: 3.2rem;
+            font-family: 'Great Vibes', cursive; font-size: clamp(2.2rem, 7vw, 3.2rem);
             margin-bottom: 20px; margin-top: 10px;
             background: linear-gradient(160deg, #8c5a63 0%, #e5989b 60%, #b5838d 100%);
             -webkit-background-clip: text; background-clip: text;
@@ -508,7 +535,7 @@
         }
         .modal-content p {
             font-family: 'Cormorant Garamond', serif; font-style: italic;
-            font-size: 1.15rem; line-height: 1.8; color: var(--rose-text);
+            font-size: clamp(1rem, 3.5vw, 1.15rem); line-height: 1.8; color: var(--rose-text);
             margin-bottom: 30px;
         }
         .modal-content p .script {
@@ -664,18 +691,23 @@
         }
 
         /* ============================================================
-           RESPONSIVE (Mobile Adjustments)
+           RESPONSIVE (Mobile Adjustments for Scrapbook & Layout)
            ============================================================ */
         @media (max-width: 600px) {
-            .top-greeting { font-size: 2.2rem; top: 20px; }
+            .top-greeting { 
+                font-size: clamp(1.6rem, 7vw, 2.2rem); 
+                top: 15px; 
+                white-space: normal;
+            }
             
             .scrapbook-container {
                 min-height: auto;
-                padding: 20px 10px;
+                padding: 20px 15px;
                 display: flex;
                 flex-direction: column;
                 align-items: center;
-                gap: 25px;
+                gap: 20px; /* Space between stacked cards */
+                width: 100%;
             }
             .scrap-item {
                 position: relative !important;
@@ -694,15 +726,22 @@
                 right: 10px;
                 font-size: 1.8rem;
             }
-            .cake-wrapper { transform: scale(0.85); }
             .gift-bow { width: 90px; height: 68px; top: -55px; }
             .title-note .card-title { font-size: 3rem; }
-            .slideshow-container { height: 140px; font-size: 1.15rem; }
+            .slideshow-container { min-height: 150px; font-size: 1.15rem; }
             
             .slide-text {
                 position: absolute;
                 width: 100%;
                 padding: 0 5px;
+            }
+            
+            .cake-wrapper {
+                /* Ensure cake doesn't overflow on very small screens */
+                width: 90vw;
+                height: 90vw;
+                max-width: 320px;
+                max-height: 320px;
             }
         }
     </style>
@@ -941,7 +980,6 @@
            ============================================================ */
         (function applyContent() {
             document.getElementById('cardTitle').textContent = CONFIG.name;
-            // Changed from "My Dearest " to "My "
             document.getElementById('modalHeading').textContent = "My " + CONFIG.name;
             document.getElementById('modalMessage').innerHTML = CONFIG.deepMessage;
             document.title = "Happy Birthday, " + CONFIG.name + " 💕";
@@ -1325,9 +1363,13 @@
                 setTimeout(() => r.remove(), 800);
             }
             document.getElementById('messageModal').classList.add('active');
+            // Prevent background scrolling when modal is open
+            document.body.style.overflow = 'hidden';
         }
         function closeMessageModal() {
             document.getElementById('messageModal').classList.remove('active');
+            // Restore background scrolling
+            document.body.style.overflow = 'auto';
         }
 
         /* ============================================================
