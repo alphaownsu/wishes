@@ -56,7 +56,6 @@
             background-attachment: fixed;
             min-height: 100vh;
             min-height: 100dvh;
-            /* FIXED: Allow scrolling and prevent content cut-off */
             overflow-x: hidden;
             overflow-y: auto;
             position: relative;
@@ -135,13 +134,12 @@
            ============================================================ */
         .top-greeting {
             position: fixed; 
-            top: clamp(10px, 4vh, 45px); 
+            top: clamp(15px, 5vh, 45px); 
             left: 50%;
             transform: translateX(-50%);
             z-index: 200;
             display: flex; align-items: center; justify-content: center;
             font-family: 'Parisienne', cursive;
-            /* FIXED: Responsive font size */
             font-size: clamp(1.8rem, 6vw, 3.4rem); 
             color: var(--rose-text);
             white-space: nowrap;
@@ -195,19 +193,23 @@
            ============================================================ */
         .container {
             position: relative; z-index: 10;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            width: 100%; max-width: 640px; 
+            display: flex; flex-direction: column; align-items: center; 
+            /* FIXED: Perfect vertical centering */
+            justify-content: center;
+            width: 100%; 
+            max-width: 640px; 
             min-height: 100vh;
             min-height: 100dvh;
-            padding: 20px;
+            /* FIXED: Padding adjusted to clear the fixed top greeting */
+            padding: 120px 20px 40px; 
             margin: 0 auto;
-            /* FIXED: Removed flex centering from body to allow natural scroll, added margin auto here */
         }
 
         .gift-wrapper {
             cursor: pointer; display: flex; flex-direction: column; align-items: center; position: relative;
             transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            margin-top: 60px; /* Give space for top greeting */
+            /* FIXED: Removed margin-top so it centers perfectly */
+            margin-top: 0; 
         }
         .gift-wrapper:hover { transform: scale(1.06); }
 
@@ -300,7 +302,6 @@
         }
         .cake-wrapper {
             position: relative; 
-            /* FIXED: Responsive size for cake */
             width: clamp(260px, 80vw, 320px); 
             height: clamp(260px, 80vw, 320px);
             cursor: pointer; perspective: 1200px; transition: transform 0.3s ease;
@@ -401,7 +402,7 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            box-sizing: border-box; /* FIXED: Prevent padding from expanding width */
+            box-sizing: border-box;
         }
         .tape {
             position: absolute; width: 60px; height: 20px;
@@ -429,7 +430,6 @@
         .title-note .card-eyebrow {
             font-family: 'Caveat', cursive; font-size: 1.8rem; color: var(--rose-2);
         }
-        /* Added Flower Sticker on Top Corner */
         .title-note .top-flower {
             position: absolute;
             top: -30px; right: 15px;
@@ -516,7 +516,6 @@
             transition: all 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             box-shadow: 0 20px 50px rgba(80,40,55,0.4);
             background-image: linear-gradient(160deg, #fffaf5 0%, #fce4ec 100%);
-            /* FIXED: Make modal scrollable on small screens */
             max-height: 90vh;
             max-height: 90dvh;
             overflow-y: auto;
@@ -567,10 +566,9 @@
         .music-btn.playing .note-icon { animation: noteSpin 3s linear infinite; }
         @keyframes noteSpin { 100% { transform: rotate(360deg); } }
 
-        /* Music Player Container */
         .music-player-container {
             position: fixed;
-            bottom: 80px; /* above the button */
+            bottom: 80px;
             right: 22px;
             width: 320px;
             height: 180px;
@@ -706,7 +704,7 @@
                 display: flex;
                 flex-direction: column;
                 align-items: center;
-                gap: 20px; /* Space between stacked cards */
+                gap: 20px;
                 width: 100%;
             }
             .scrap-item {
@@ -737,11 +735,15 @@
             }
             
             .cake-wrapper {
-                /* Ensure cake doesn't overflow on very small screens */
                 width: 90vw;
                 height: 90vw;
                 max-width: 320px;
                 max-height: 320px;
+            }
+            
+            /* FIXED: Adjust padding for mobile to ensure perfect centering */
+            .container {
+                padding: 100px 15px 30px; 
             }
         }
     </style>
@@ -856,7 +858,6 @@
             <div class="scrap-item title-note">
                 <div class="tape top-left"></div>
                 <div class="tape top-right"></div>
-                <!-- Added Flower Sticker on top corner -->
                 <div class="top-flower">🌸</div>
                 <div class="card-eyebrow">Happy Birthday, Mere Bche</div>
                 <div class="card-title" id="cardTitle">Mehkuu</div>
@@ -1005,13 +1006,12 @@
         /* ============================================================
            MUSIC PLAYER (YouTube & Spotify Support)
            ============================================================ */
-        let musicPlayer = null;       // YouTube player instance
+        let musicPlayer = null;
         let musicPlayerReady = false;
         let musicPlayerContainer = document.getElementById('musicPlayerContainer');
         let musicPlayerInner = document.getElementById('musicPlayerInner');
         let musicBtn = document.getElementById('musicBtn');
 
-        // Load YouTube API dynamically if needed
         function loadYouTubeAPI() {
             return new Promise((resolve) => {
                 if (window.YT && window.YT.Player) {
@@ -1028,14 +1028,12 @@
             });
         }
 
-        // Extract YouTube video ID from URL
         function extractYouTubeID(url) {
             const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
             const match = url.match(regExp);
             return (match && match[2].length === 11) ? match[2] : null;
         }
 
-        // Extract Spotify embed URL from URL
         function extractSpotifyEmbed(url) {
             const regExp = /open\.spotify\.com\/(track|album|playlist|artist)\/([a-zA-Z0-9]+)/;
             const match = url.match(regExp);
@@ -1045,7 +1043,6 @@
             return null;
         }
 
-        // Initialize music based on config
         async function initMusic() {
             const cfg = CONFIG.music;
             if (!cfg || !cfg.type || !cfg.url) return;
@@ -1106,7 +1103,6 @@
             }
         }
 
-        // Toggle music player container visibility
         function toggleMusicPlayer() {
             const cfg = CONFIG.music;
             if (!cfg || !cfg.type || !cfg.url) return;
@@ -1114,7 +1110,6 @@
             musicPlayerContainer.classList.toggle('active');
         }
 
-        // Initialize on DOM ready
         document.addEventListener('DOMContentLoaded', () => {
             initMusic();
         });
@@ -1363,12 +1358,10 @@
                 setTimeout(() => r.remove(), 800);
             }
             document.getElementById('messageModal').classList.add('active');
-            // Prevent background scrolling when modal is open
             document.body.style.overflow = 'hidden';
         }
         function closeMessageModal() {
             document.getElementById('messageModal').classList.remove('active');
-            // Restore background scrolling
             document.body.style.overflow = 'auto';
         }
 
